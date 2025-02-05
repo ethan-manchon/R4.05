@@ -51,12 +51,24 @@ groundMesh.receiveShadow = true; // Active la réception des ombres
 scene.add(groundMesh);
 
 // geometry
-const geometry = new THREE.BoxGeometry(4, 8, 1);
-const geometryMaterial = new THREE.MeshStandardMaterial({ color: 0x0000ff });
-const geometryMesh = new THREE.Mesh(geometry, geometryMaterial);
-geometryMesh.position.y = 8; // Positionne la boîte au-dessus du sol
-geometryMesh.castShadow = true; // Active la projection des ombres
-scene.add(geometryMesh);
+// const geometry = new THREE.BoxGeometry(4, 8, 1);
+// const geometryMaterial = new THREE.MeshStandardMaterial({ color: 0x0000ff });
+// const geometryMesh = new THREE.Mesh(geometry, geometryMaterial);
+// geometryMesh.position.y = 8; // Positionne la boîte au-dessus du sol
+// geometryMesh.castShadow = true; // Active la projection des ombres
+// scene.add(geometryMesh);
+
+
+const loader = new GLTFLoader();
+
+loader.load( 'assets/Rocketship.glb', function ( gltf ) {
+
+	scene.add( gltf.scene );
+}, undefined, function ( error ) {
+
+	console.error( error );
+
+} );
 
 // Camera
 const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight);
