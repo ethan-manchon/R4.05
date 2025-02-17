@@ -6,7 +6,7 @@ Développement d'un projet 3D interactif en Three.js pour une expérience immers
 
 Cloner le dépôt :
 ```
-  git clone https://github.com/utilisateur/threejs-web-project.git
+  git clone https://github.com/ethan-manchon/R4.05.git
 ```
 🎮 Objectif du Projet
 
