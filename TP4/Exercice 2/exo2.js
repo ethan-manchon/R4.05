@@ -156,7 +156,9 @@ class Figure {
         for(let i = 0; i < 2; i++) {
             const eye = new THREE.Mesh(geometry, material)
             const m = i % 2 === 0 ? 1 : -1
-            
+            if (m == 0) {
+                leftEye = eye;
+            }
             // Add the eye to the group
             eyes.add(eye)
             
@@ -220,22 +222,20 @@ class Figure {
         
         this.chest.add(legs)
     }    
-    bounce() {
+
+    update () {        
         // Rotate the figure
         this.group.rotation.y = this.params.ry
-        
         // Bounce up and down
         this.group.position.y = this.params.y
-        
         // Move the arms
         this.arms.forEach((arm, index) => {
             const m = index % 2 === 0 ? 1 : -1
             arm.rotation.z = this.params.armRotation * m
         })
-    }
-    update () {
+        
         this.head.rotation.z = this.params.headRotation;
-        this.head.children[0].scale.y = (this.params.leftEyeScale, this.params.leftEyeScale, this.params.leftEyeScale)
+        this.leftEye.scale.y = (this.params.leftEyeScale, this.params.leftEyeScale, this.params.leftEyeScale)
     }
     init() {
         this.createHead()
@@ -259,17 +259,20 @@ document.addEventListener('keydown', (event) => {
             armRotation: degreesToRadians(90),
             duration: 0.3,
             yoyo: true,
-            repeat: 1,            
+            repeat: 1,    
         });
+        idleTL.pause();        
     }
     else if (event.key == 'ArrowRight') {
         rySpeed += 0.15;
         if (rySpeed > 0.3) {
             rySpeed = 0.3;
         }
+        idleTL.pause();
     }
     else if (event.key == 'ArrowLeft') {
         rySpeed -= 0.15;
+        idleTL.pause();
     }
 })
 
@@ -285,17 +288,21 @@ idleTL.to(figure.params, {
 
 idleTL.to(figure.params, {
     leftEyeScale: 1.2,
-    duration: 0.5,
+    duration: 1,
     yoyo: true,
     repeat: 1,
 }, ">2.2");
+
 
 
 // boucle d'animation
 gsap.ticker.add(() => {
     figure.params.ry += rySpeed;
     rySpeed *= 0.93;
-    figure.bounce();
+    if (!keyTL.isActive() && !idleTL.isActive() && rySpeed < 0.01){
+        idleTL.restart();
+    }
+    figure.update();
 });
 
 // Camera
